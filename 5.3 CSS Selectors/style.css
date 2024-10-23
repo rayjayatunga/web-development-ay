@@ -5,3 +5,23 @@ ol {
 }
 
 /* Write your CSS below, don't change the rules above. */
+/* Element selector: all paragraph tags */
+p{
+  color:red
+}
+/* class selector: all tags with the class attribute note */
+.note{
+  font-size: 20px;
+}
+/* id selector: the unique tag with the id id-selector-demo */
+#id-selector-demo{
+  color:green
+}
+/*element + attribute selector: all list elements with the attribute value that has a 'value' of 4 */
+li[value="4"]{
+  color:blue
+}
+/*universal selector: applies to all html elements on the page*/
+*{
+  text-align: center;
+}
