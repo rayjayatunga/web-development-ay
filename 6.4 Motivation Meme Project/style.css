@@ -1,0 +1,33 @@
+html{
+    background-color: black;
+}
+.motivational-poster{
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 100px;
+    width: 500px;
+    height: 500px;
+}
+#hagrid{
+    border: 5px solid white ;
+    width:100%;
+
+}
+#big-text{
+    color: white;
+    font-family: "Libre Baskerville", serif;
+    font-weight: 400;
+    font-style: normal;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+#little-text{
+    color: white;
+    font-family: "Libre Baskerville", serif;
+    font-weight: 400;
+    font-style: normal;
+    text-align: center;
+
+
+}
