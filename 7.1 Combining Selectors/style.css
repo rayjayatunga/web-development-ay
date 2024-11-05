@@ -1,0 +1,41 @@
+/* Write your code here: */
+
+/* Grouping */
+h1,h2{
+    color: blueviolet;
+}
+
+/* Child */
+/* Apples to children that are one level below a specified parent */
+#parent > #child {
+    color: firebrick
+}
+
+div[class = "box"] > p{
+    color:firebrick
+}
+
+/* Descendant */
+#ancestor #descendant{
+    color:blue
+}
+
+.box li{
+    color:blue
+}
+
+/* Chaining */
+/*Intended to apply to one single element. Chaining is a super specific way of 
+selecting
+Always start in the order of element, class, id
+*/
+
+li.done{
+    color:seagreen
+}
+
+/*Combining combiners */
+/* In the example below, combined chaining with the child selector */
+ul > p.done{
+    font-size: 0.5rem;
+}
