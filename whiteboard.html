@@ -1,18 +1,217 @@
-<p>Yellow Text</p>
-      <div class="box inner-box">
-        <p class="white-text">White Text</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devtest-ai</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    /* Main Content Styles */
+    main {
+      display: flex;
+      flex-direction: row;
+      height: calc(100vh - 4rem);
+    }
+
+    .question-container {
+      background-color: #f5f5f5;
+      flex: 2;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .code-container {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      flex: 3;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .code-editor-container {
+      background-color: #1e1e1e;
+      border-radius: 4px;
+      color: #d4d4d4;
+      display: flex;
+      height: 80%;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+
+    .line-numbers {
+      background-color: #2b2b2b;
+      border-right: 1px solid #3c3c3c;
+      font-family: 'Consolas', monospace;
+      font-size: 16px;
+      padding: 1rem;
+      text-align: right;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+    }
+
+    .code-editor {
+      background-color: #1e1e1e;
+      border-radius: 4px;
+      color: #d4d4d4;
+      flex: 1;
+      font-family: 'Consolas', monospace;
+      font-size: 16px;
+      padding: 1rem;
+      resize: none;
+      outline: none;
+      border: none;
+      line-height: 1.5;
+    }
+
+    .code-editor .string {
+      color: #ce9178;
+    }
+
+    .code-editor .number {
+      color: #b5cea8;
+    }
+
+    .code-editor .keyword {
+      color: #c586c0;
+    }
+
+    .code-editor .comment {
+      color: #6a9955;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+    }
+
+    .button.hints {
+      background-color: #008CBA;
+    }
+
+    #output {
+      background-color: #1e1e1e;
+      border-radius: 4px;
+      color: #d4d4d4;
+      margin-top: 1rem;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Devtest-ai</h1>
+  </header>
+  <main>
+    <div class="question-container">
+      <h2>Coding Challenge</h2>
+      <p>
+        Write a function that takes in a list of numbers and returns the second largest number.
+      </p>
+    </div>
+    <div class="code-container">
+      <div class="code-editor-container">
+        <div class="line-numbers">
+          <!-- Line numbers will be dynamically generated -->
+        </div>
+        <textarea class="code-editor" id="code-editor"></textarea>
       </div>
+      <div class="button-container">
+        <button class="button" id="run-button">Run</button>
+        <button class="button hints" id="hints-button">Hints</button>
+      </div>
+      <div id="output"></div>
+    </div>
+  </main>
 
-<style>
-    p{
-        color:yellow
+  <script>
+    // Get references to the necessary elements
+    const codeEditor = document.getElementById('code-editor');
+    const runButton = document.getElementById('run-button');
+    const hintsButton = document.getElementById('hints-button');
+    const outputDiv = document.getElementById('output');
+    const lineNumbersDiv = document.querySelector('.line-numbers');
+
+    // Add event listener to the "Run" button
+    runButton.addEventListener('click', () => {
+      const code = codeEditor.value;
+      fetch('/run-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code: code })
+      })
+      .then(response => response.json())
+      .then(data => {
+        outputDiv.textContent = data.output;
+      })
+      .catch(error => {
+        outputDiv.textContent = 'Error running your code. Please try again.';
+      });
+    });
+
+    // Add event listener to the "Hints" button
+    hintsButton.addEventListener('click', () => {
+      fetch('/get-hints')
+      .then(response => response.json())
+      .then(data => {
+        outputDiv.textContent = data.hints;
+      })
+      .catch(error => {
+        outputDiv.textContent = 'Error fetching hints. Please try again.';
+      });
+    });
+
+    // Function to generate line numbers
+    function generateLineNumbers() {
+      const numLines = codeEditor.value.split('\n').length;
+      let lineNumbers = '';
+      for (let i = 1; i <= numLines; i++) {
+        lineNumbers += `${i}\n`;
+      }
+      lineNumbersDiv.innerHTML = lineNumbers.trim().replace(/\n/g, '<br>');
     }
 
-    .inner-box p{
-        color:white
-    }
+    // Add event listener to update line numbers when code changes
+    codeEditor.addEventListener('input', generateLineNumbers);
 
-    h1, h2{
-        color: blue
-    }
-</style>
+    // Add event listener to update line numbers when text cursor moves
+    codeEditor.addEventListener('scroll', () => {
+      // Scroll the line numbers with the code editor
+      lineNumbersDiv.scrollTop = codeEditor.scrollTop;
+    });
+
+    // Generate initial line numbers
+    generateLineNumbers();
+  </script>
+</body>
+</html>
